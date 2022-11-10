@@ -7,10 +7,5 @@ slave {
        dockerImage = docker.build("jackraja/-jenkins-cicd-php-demo:latest")
     }
     
- stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials')
-         {
-        dockerImage.push()
-        }
-    }    
+
 }
