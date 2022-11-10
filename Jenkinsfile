@@ -16,5 +16,3 @@ pipeline {
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
-    }
-  }
