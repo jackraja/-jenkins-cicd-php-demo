@@ -1,4 +1,7 @@
-slave {   
+ pipeline {
+    agent slave
+
+{   
     stage('Clone repository') {
         git credentialsId: 'git', url: 'https://github.com/jackraja/-jenkins-cicd-php-demo.git'
     }
