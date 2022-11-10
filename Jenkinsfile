@@ -1,11 +1,39 @@
 pipeline {
-    agent any
+  environment {
+    registry = "jackraja/jenkins-cicd-php-demo" 
 
-    stages {
-        stage('Deploy PHP application') {
-            steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'slave', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/var/www/html/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.php')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-            }
-        }
+    registryCredential = 'docker-hub-credentials'
+    dockerImage = ''
+  }
+  agent any
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/jackraja/-jenkins-cicd-php-demo.git'
+      }
     }
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+    stage('Push Image') {
+      steps{
+        script {
+          /* Finally, we'll push the image with two tags:
+                   * First, the incremental build number from Jenkins
+                   * Second, the 'latest' tag.
+                   * Pushing multiple tags is cheap, as all the layers are reused. */
+          docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+              dockerImage.push("${env.BUILD_NUMBER}")
+              dockerImage.push("latest")
+          }
+        }
+      }
+    }
+    
+    }
+  }
 }
