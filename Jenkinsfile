@@ -1,22 +1,15 @@
-pipeline {
-  environment {
-    registry = "jackraja/-jenkins-cicd-php-demo"
-    registryCredential = 'docker-hub-credentials'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Cloning Git') {
-      steps {
-        git 'https://github.com/jackraja/-jenkins-cicd-php-demo.git'
-      }
+slave {   
+    stage('Clone repository') {
+        git credentialsId: 'github-credentials', url: 'https://github.com/jackraja/-jenkins-cicd-php-demo.git'
     }
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+    
+    stage('Build image') {
+       dockerImage = docker.build("jackraja/-jenkins-cicd-php-demo:latest")
+    }
+    
+ stage('Push image') {
+        withDockerRegistry([ credentialsId: "docker-hub-credentials", url: 'https://registry.hub.docker.com' ]) {
+        dockerImage.push()
         }
-      }
-    }
-  }
+    }    
 }
