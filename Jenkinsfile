@@ -1,4 +1,5 @@
-node {   
+node {  
+    checkout scm 
     stage('Clone repository') {
         git credentialsId: 'git', url: 'https://github.com/jackraja/-jenkins-cicd-php-demo'
     }
