@@ -1,4 +1,4 @@
-slave {   
+node {   
     stage('Clone repository') {
         git credentialsId: 'github-credentials', url: 'https://github.com/jackraja/-jenkins-cicd-php-demo.git'
     }
