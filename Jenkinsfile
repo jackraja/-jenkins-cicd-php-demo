@@ -1,6 +1,6 @@
 node {   
     stage('Clone repository') {
-        git credentialsId: 'git', url: 'https://github.com/jackraja/-jenkins-cicd-php-demo.git'
+        git credentialsId: 'git', url: 'https://github.com/jackraja/-jenkins-cicd-php-demo'
     }
     
     stage('Build image') {
