@@ -1,9 +1,10 @@
-FROM centos
+FROM ubuntu
 MAINTAINER ServerWorld <admin@srv.world>
 
-RUN yum -y install httpd
-RUN echo "Dockerfile Test on Aapche httpd" > /var/www/html/index.html
+RUN apt-get update
+RUN apt-get -y install tzdata
+RUN apt-get -y install apache2
+RUN echo "Dockerfile Test on Apache2" > /var/www/html/index.html
 
 EXPOSE 80
-CMD ["-D", "FOREGROUND"]
-ENTRYPOINT ["/usr/sbin/httpd"]
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
